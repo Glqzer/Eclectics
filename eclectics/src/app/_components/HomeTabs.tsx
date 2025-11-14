@@ -174,11 +174,14 @@ export default function HomeTabs() {
                     const dateStr = new Intl.DateTimeFormat('en-US', {
                       weekday: 'short', month: 'short', day: 'numeric'
                     }).format(dtStart);
+                    const nowLocal = new Date();
+                    const isToday = dtStart.getFullYear() === nowLocal.getFullYear() && dtStart.getMonth() === nowLocal.getMonth() && dtStart.getDate() === nowLocal.getDate();
+                    const dateLabel = isToday ? 'Today' : dateStr;
                     const hasStart = !!(s.startTime || s.time);
                     const hasEnd = !!s.endTime;
                     const startStr = hasStart ? new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' }).format(dtStart) : '';
                     const endStr = hasEnd ? new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' }).format(dtEnd) : '';
-                    const when = hasStart ? `${dateStr}, ${startStr}${hasEnd ? ' – ' + endStr : ''}` : dateStr;
+                    const when = hasStart ? `${dateLabel}, ${startStr}${hasEnd ? ' – ' + endStr : ''}` : dateLabel;
                     // duration calculation in minutes
                     let durationLabel = '';
                     if (hasStart && hasEnd) {
