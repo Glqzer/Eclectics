@@ -19,7 +19,8 @@ export default function ScheduleForm() {
     setError('');
     setLoading(true);
     try {
-      const payload = { title, date, startTime, endTime, type, location, description: description || undefined };
+      const normalizedEnd = (endTime ?? '').toString().trim() === '' ? undefined : endTime;
+      const payload = { title, date, startTime, endTime: normalizedEnd, type, location, description: description || undefined };
       const res = await fetch('/api/schedules', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

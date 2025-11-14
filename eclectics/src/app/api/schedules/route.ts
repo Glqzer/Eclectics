@@ -4,7 +4,7 @@ import { schedules } from '@/src/database/schema';
 import { cookies } from 'next/headers';
 import { z } from 'zod';
 
-const timePattern = /^\d{2}:\d{2}(?: ?[AP]M)?$/i;
+const timePattern = /^\d{1,2}:\d{2}(?: ?[AP]M)?$/i;
 const CreateScheduleSchema = z.object({
   title: z.string().min(1),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -58,9 +58,13 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 403 });
   }
   const json = await req.json().catch(() => null);
+  if (json && typeof json.endTime === 'string' && json.endTime.trim() === '') {
+    delete json.endTime; // treat empty string as omitted/undefined
+  }
   const parsed = CreateScheduleSchema.safeParse(json);
   if (!parsed.success) {
-    return new Response(JSON.stringify({ error: 'Invalid payload' }), { status: 400 });
+    const first = (parsed as any).error?.errors?.[0];
+    return new Response(JSON.stringify({ error: first?.message || 'Invalid payload' }), { status: 400 });
   }
   const { title, date, startTime, endTime, type, location, description } = parsed.data as any;
   const inserted = await db.insert(schedules).values({ title, date, startTime, endTime: endTime ?? null, type, location, description }).returning();

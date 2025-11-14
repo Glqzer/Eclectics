@@ -17,7 +17,7 @@ async function isAdmin(): Promise<boolean> {
   }
 }
 
-const timePattern = /^\d{2}:\d{2}(?: ?[AP]M)?$/i;
+const timePattern = /^\d{1,2}:\d{2}(?: ?[AP]M)?$/i;
 const PatchSchema = z.object({
   title: z.string().min(1).optional(),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
