@@ -4,8 +4,9 @@ import { eq } from 'drizzle-orm';
 import { NextRequest } from 'next/server';
 
 // GET /api/choreographies/[id] - get a single choreography with choreographer info
-export async function GET(_req: NextRequest, { params }: { params: { id: string } }) {
-  const id = Number(params.id);
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id: idStr } = await params;
+  const id = Number(idStr);
   if (isNaN(id)) {
     return new Response(JSON.stringify({ error: 'Invalid id' }), { status: 400 });
   }

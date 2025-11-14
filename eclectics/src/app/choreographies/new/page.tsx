@@ -15,10 +15,15 @@ export default async function NewChoreographyPage() {
   // fetch users for choreographer select
   const usersList = await db.select({ id: users.id, name: users.name, email: users.email }).from(users).orderBy(users.name);
 
+  async function action(formData: FormData): Promise<void> {
+    'use server';
+    await createChoreography(formData);
+  }
+
   return (
     <div className="max-w-3xl mx-auto py-10 px-6">
       <h1 className="text-2xl font-semibold mb-6">Add Choreography</h1>
-      <form action={createChoreography} className="space-y-6">
+      <form action={action} className="space-y-6">
         <div>
           <label className="block text-sm font-medium mb-1" htmlFor="name">Choreography Name</label>
           <input id="name" name="name" type="text" className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400" required />
