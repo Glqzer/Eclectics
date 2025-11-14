@@ -9,12 +9,13 @@ const CreateScheduleSchema = z.object({
   title: z.string().min(1),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   startTime: z.string().regex(timePattern),
-  endTime: z.string().regex(timePattern),
+  endTime: z.string().regex(timePattern).optional(),
   type: z.enum(['workshop','teaching','blocking','cleaning','performance','social','other']),
   location: z.string().min(1),
   description: z.string().min(1).optional()
 }).refine(d => {
   // simple comparison by converting both to minutes since midnight (24h assumed)
+  if (!d.endTime) return true;
   function toMinutes(t: string) {
     const ampm = /(AM|PM)$/i.test(t) ? t.slice(-2).toUpperCase() : '';
     const [hhRaw, mmRaw] = t.replace(/(AM|PM)$/i, '').trim().split(':');
@@ -62,6 +63,6 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify({ error: 'Invalid payload' }), { status: 400 });
   }
   const { title, date, startTime, endTime, type, location, description } = parsed.data as any;
-  const inserted = await db.insert(schedules).values({ title, date, startTime, endTime, type, location, description }).returning();
+  const inserted = await db.insert(schedules).values({ title, date, startTime, endTime: endTime ?? null, type, location, description }).returning();
   return new Response(JSON.stringify(inserted[0]), { status: 201 });
 }

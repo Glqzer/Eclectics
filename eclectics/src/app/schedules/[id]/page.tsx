@@ -52,7 +52,7 @@ export default async function SchedulePage({ params }: Params) {
         </div>
       )}
       <div className="text-sm text-gray-600 mb-4">
-        {s.date} {s.startTime || s.time}{(s.endTime || s.startTime) ? ' – ' + (s.endTime || s.startTime) : ''} · {s.location}
+        {s.date} {s.startTime || s.time}{s.endTime ? ' – ' + s.endTime : ''}{s.location ? ' · ' + s.location : ''}
       </div>
       {s.description && (
         <div className="prose prose-sm mb-4">{s.description}</div>

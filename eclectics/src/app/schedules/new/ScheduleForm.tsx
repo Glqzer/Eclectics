@@ -54,8 +54,8 @@ export default function ScheduleForm() {
           <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} required className="w-full border rounded px-3 py-2 text-black bg-white form-input" />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">End Time</label>
-          <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} required className="w-full border rounded px-3 py-2 text-black bg-white form-input" />
+          <label className="block text-sm font-medium mb-1">End Time <span className="text-xs text-gray-500">(optional)</span></label>
+          <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} className="w-full border rounded px-3 py-2 text-black bg-white form-input" placeholder="--:--" />
         </div>
       </div>
       <div>
