@@ -192,11 +192,11 @@ export default function HomeTabs() {
                     }
                     return (
                       <li key={s.id} className="border rounded p-3 hover:shadow">
-                        <Link href={`/schedules/${s.id}`} className="block">
-                          <div>
-                            <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{s.title}</div>
+                        <Link href={`/schedules/${s.id}`} className="flex items-center justify-between gap-4">
+                          <div className="min-w-0 flex-1">
+                            <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{s.title}</div>
                             <div className="flex flex-wrap items-center gap-2 mt-0.5">
-                              <span className="text-xs text-gray-500 dark:text-gray-400">{when}</span>
+                              <span className="text-xs text-gray-500 dark:text-gray-400">{when}{s.location ? ` · ${s.location}` : ''}</span>
                               {durationLabel && (
                                 <span className="text-xs rounded-full bg-gray-100 dark:bg-zinc-800 px-2 py-0.5 text-gray-600 dark:text-gray-300">{durationLabel}</span>
                               )}
@@ -204,6 +204,9 @@ export default function HomeTabs() {
                                 <span className="text-xs rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 px-2 py-0.5">{s.type}</span>
                               )}
                             </div>
+                          </div>
+                          <div className="shrink-0">
+                            <span className="inline-flex items-center text-xs font-semibold text-purple-600 dark:text-purple-300 hover:underline">View →</span>
                           </div>
                         </Link>
                       </li>
