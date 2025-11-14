@@ -181,7 +181,10 @@ export default function HomeTabs() {
                     }).format(dtStart);
                     const nowLocal = new Date();
                     const isToday = dtStart.getFullYear() === nowLocal.getFullYear() && dtStart.getMonth() === nowLocal.getMonth() && dtStart.getDate() === nowLocal.getDate();
-                    const dateLabel = isToday ? 'Today' : dateStr;
+                    const tomorrow = new Date(nowLocal.getFullYear(), nowLocal.getMonth(), nowLocal.getDate() + 1);
+                    const isTomorrow = dtStart.getFullYear() === tomorrow.getFullYear() && dtStart.getMonth() === tomorrow.getMonth() && dtStart.getDate() === tomorrow.getDate();
+                    const monthDay = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' }).format(dtStart);
+                    const dateLabel = isToday ? `Today, ${monthDay}` : (isTomorrow ? `Tomorrow, ${monthDay}` : dateStr);
                     const hasStart = !!(s.startTime || s.time);
                     const hasEnd = !!s.endTime;
                     const startStr = hasStart ? new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' }).format(dtStart) : '';
