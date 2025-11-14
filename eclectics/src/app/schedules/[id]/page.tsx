@@ -30,7 +30,7 @@ export default async function SchedulePage({ params }: Params) {
     <div className="max-w-3xl mx-auto py-10 px-6">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <Link href="/" className="text-sm text-purple-600 hover:underline">← Back to list</Link>
+          <Link href="/?tab=schedule" className="text-sm text-purple-600 hover:underline">← Back to list</Link>
         </div>
         {isAdmin && (
           <div>

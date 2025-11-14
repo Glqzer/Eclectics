@@ -71,7 +71,7 @@ export default async function ChoreographyPage({ params }: Params) {
   return (
     <div className="max-w-3xl mx-auto py-10 px-6">
       <div className="mb-6">
-        <Link href="/" className="text-sm text-purple-600 hover:underline">← Back to list</Link>
+        <Link href="/?tab=choreographies" className="text-sm text-purple-600 hover:underline">← Back to list</Link>
         {isAdmin && (
           <Link
             href={`/choreographies/${c.id}/edit`}

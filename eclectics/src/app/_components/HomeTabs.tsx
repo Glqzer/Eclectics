@@ -1,8 +1,11 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function HomeTabs() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [tab, setTab] = useState<'choreographies' | 'schedule'>('choreographies');
   const [email, setEmail] = useState<string | null>(null);
   const [choreographies, setChoreographies] = useState<Array<any>>([]);
@@ -36,6 +39,14 @@ export default function HomeTabs() {
       return null;
     }
   }
+  // Initialize tab from URL (?tab=schedule|choreographies)
+  useEffect(() => {
+    const qp = searchParams?.get('tab');
+    if (qp === 'schedule' || qp === 'choreographies') {
+      setTab(qp);
+    }
+  }, [searchParams]);
+
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -85,12 +96,19 @@ export default function HomeTabs() {
     return () => { mounted = false; };
   }, []);
 
+  function switchTab(next: 'choreographies' | 'schedule') {
+    setTab(next);
+    const url = new URL(window.location.href);
+    url.searchParams.set('tab', next);
+    router.replace(url.pathname + '?' + url.searchParams.toString());
+  }
+
   return (
     <div className="w-full max-w-4xl mx-auto">
       <div className="flex gap-2 border-b border-gray-200 dark:border-gray-800 mb-6">
         <button
           type="button"
-          onClick={() => setTab('choreographies')}
+          onClick={() => switchTab('choreographies')}
           className={`px-4 py-2 rounded-t-md text-sm font-medium transition-colors ${
             tab === 'choreographies'
               ? 'bg-white dark:bg-zinc-900 border-x border-t border-gray-200 dark:border-gray-800 text-purple-700 dark:text-purple-300'
@@ -101,7 +119,7 @@ export default function HomeTabs() {
         </button>
         <button
           type="button"
-          onClick={() => setTab('schedule')}
+          onClick={() => switchTab('schedule')}
           className={`px-4 py-2 rounded-t-md text-sm font-medium transition-colors ${
             tab === 'schedule'
               ? 'bg-white dark:bg-zinc-900 border-x border-t border-gray-200 dark:border-gray-800 text-purple-700 dark:text-purple-300'
