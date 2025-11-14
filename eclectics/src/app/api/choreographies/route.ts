@@ -4,17 +4,29 @@ import { eq } from 'drizzle-orm';
 
 // GET /api/choreographies - get all choreographies with choreographer info
 export async function GET() {
-  const all = await db.select({
-    id: choreographies.id,
-    cut: choreographies.cut,
-    cleaningVideos: choreographies.cleaningVideos,
-    cleaningNotes: choreographies.cleaningNotes,
-    createdAt: choreographies.createdAt,
-    choreographer: users
-  })
-    .from(choreographies)
-    .leftJoin(users, eq(choreographies.choreographerUserId, users.id));
-  return Response.json(all);
+  try {
+    const all = await db.select({
+      id: choreographies.id,
+      name: choreographies.name,
+      cut: choreographies.cut,
+      cleaningVideos: choreographies.cleaningVideos,
+      cleaningNotes: choreographies.cleaningNotes,
+      createdAt: choreographies.createdAt,
+      choreographer: {
+        id: users.id,
+        name: users.name,
+        email: users.email
+      }
+    })
+      .from(choreographies)
+      .leftJoin(users, eq(choreographies.choreographerUserId, users.id));
+    return Response.json(all);
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : String(err);
+    const stack = err instanceof Error ? err.stack?.split('\n')?.slice(0, 5) : undefined;
+    // Return error details to help debug 500s in dev
+    return new Response(JSON.stringify({ error: 'DB error', message, stack }), { status: 500 });
+  }
 }
 
 // POST /api/choreographies - admin only
@@ -44,8 +56,8 @@ export async function POST(req: Request) {
   } catch {
     return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400 });
   }
-  const { choreographerUserId, cut, cleaningVideos, cleaningNotes } = body;
-  if (!choreographerUserId || !cut || !cleaningVideos || !cleaningNotes) {
+  const { choreographerUserId, name, cut, cleaningVideos, cleaningNotes } = body;
+  if (!choreographerUserId || !name || !cut || !cleaningVideos || !cleaningNotes) {
     return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
   }
   // Check if user exists
@@ -55,6 +67,7 @@ export async function POST(req: Request) {
   }
   const inserted = await db.insert(choreographies).values({
     choreographerUserId,
+    name,
     cut,
     cleaningVideos,
     cleaningNotes

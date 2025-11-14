@@ -12,6 +12,7 @@ export const users = pgTable('users', {
 export const choreographies = pgTable('choreographies', {
   id: serial('id').primaryKey(),
   choreographerUserId: integer('choreographer_user_id').notNull().references(() => users.id),
+  name: varchar('name', { length: 255 }).notNull().default(''),
   cut: varchar('cut', { length: 512 }),
   cleaningVideos: varchar('cleaning_videos', { length: 512 }),
   cleaningNotes: varchar('cleaning_notes', { length: 512 }),

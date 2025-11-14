@@ -11,6 +11,7 @@ export async function GET(_req: NextRequest, { params }: { params: { id: string 
   }
   const result = await db.select({
     id: choreographies.id,
+    name: choreographies.name,
     cut: choreographies.cut,
     cleaningVideos: choreographies.cleaningVideos,
     cleaningNotes: choreographies.cleaningNotes,
