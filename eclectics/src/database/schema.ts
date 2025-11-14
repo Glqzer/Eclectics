@@ -19,3 +19,15 @@ export const choreographies = pgTable('choreographies', {
   createdAt: timestamp('created_at').defaultNow().notNull()
 });
 
+
+export const schedules = pgTable('schedules', {
+  id: serial('id').primaryKey(),
+  title: varchar('title', { length: 255 }).notNull(),
+  date: varchar('date', { length: 10 }).notNull(), // YYYY-MM-DD
+  time: varchar('time', { length: 8 }).notNull(), // HH:MM (24h) or HH:MM AM/PM
+  type: varchar('type', { length: 50 }).notNull(),
+  location: varchar('location', { length: 255 }).notNull(),
+  description: varchar('description', { length: 1024 }),
+  createdAt: timestamp('created_at').defaultNow().notNull()
+});
+

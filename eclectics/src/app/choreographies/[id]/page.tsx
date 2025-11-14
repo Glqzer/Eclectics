@@ -72,6 +72,9 @@ export default async function ChoreographyPage({ params }: Params) {
     <div className="max-w-3xl mx-auto py-10 px-6">
       <div className="mb-6">
         <Link href="/" className="text-sm text-purple-600 hover:underline">← Back to list</Link>
+        {isAdmin && (
+          <Link href={`/choreographies/${c.id}/edit`} className="ml-4 text-sm text-gray-700 hover:underline">Edit</Link>
+        )}
       </div>
       <h1 className="text-2xl font-semibold mb-4">{c.name}</h1>
       <div className="mb-4 text-sm text-gray-600">By {c.choreographer?.name || c.choreographer?.email}</div>

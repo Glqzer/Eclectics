@@ -22,7 +22,7 @@ export async function createChoreography(formData: FormData) {
   if (!choreographerIdRaw) return { error: 'Choreographer required' };
   const choreographerUserId = parseInt(choreographerIdRaw.toString(), 10);
   if (Number.isNaN(choreographerUserId)) return { error: 'Invalid choreographer' };
-  if (!name || !cut || !cleaningVideo || !cleaningNote) return { error: 'All fields required' };
+  if (!name) return { error: 'Name required' };
 
   // verify choreographer user exists
   const userRows = await db.select().from(users).where(eq(users.id, choreographerUserId));
@@ -31,9 +31,9 @@ export async function createChoreography(formData: FormData) {
   await db.insert(choreographies).values({
     choreographerUserId,
     name,
-    cut,
-    cleaningVideos: cleaningVideo,
-    cleaningNotes: cleaningNote,
+    cut: cut || null,
+    cleaningVideos: cleaningVideo || null,
+    cleaningNotes: cleaningNote || null,
   });
 
   redirect('/');
