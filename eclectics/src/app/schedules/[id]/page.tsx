@@ -38,8 +38,17 @@ export default async function SchedulePage({ params }: Params) {
           </div>
         )}
       </div>
-      <h1 className="text-2xl font-semibold mb-2">{s.title}</h1>
-      <div className="text-sm text-gray-600 mb-4">{s.date} {s.time} · {s.location}</div>
+      <h1 className="text-2xl font-semibold mb-1">{s.title}</h1>
+      {s.type && (
+        <div className="mb-2">
+          <span className="inline-flex items-center rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 px-2 py-0.5 text-xs font-medium">
+            {s.type}
+          </span>
+        </div>
+      )}
+      <div className="text-sm text-gray-600 mb-4">
+        {s.date} {s.startTime || s.time}{(s.endTime || s.startTime) ? ' – ' + (s.endTime || s.startTime) : ''} · {s.location}
+      </div>
       {s.description && (
         <div className="prose prose-sm mb-4">{s.description}</div>
       )}

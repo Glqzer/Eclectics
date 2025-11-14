@@ -6,7 +6,8 @@ export default function EditScheduleForm({ schedule }: { schedule: any }) {
   const router = useRouter();
   const [title, setTitle] = useState(schedule.title || '');
   const [date, setDate] = useState(schedule.date || '');
-  const [time, setTime] = useState(schedule.time || '');
+  const [startTime, setStartTime] = useState(schedule.startTime || schedule.time || '');
+  const [endTime, setEndTime] = useState(schedule.endTime || schedule.time || '');
   const [type, setType] = useState(schedule.type || '');
   const [location, setLocation] = useState(schedule.location || '');
   const [description, setDescription] = useState(schedule.description || '');
@@ -18,7 +19,7 @@ export default function EditScheduleForm({ schedule }: { schedule: any }) {
     setError('');
     setLoading(true);
     try {
-      const payload = { title, date, time, type, location, description: description || undefined };
+      const payload: Record<string, unknown> = { title, date, startTime, endTime, type, location, description: description || undefined };
       const res = await fetch(`/api/schedules/${schedule.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -48,13 +49,26 @@ export default function EditScheduleForm({ schedule }: { schedule: any }) {
           <input type="date" value={date} onChange={e => setDate(e.target.value)} required className="w-full border rounded px-3 py-2" />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Time</label>
-          <input value={time} onChange={e => setTime(e.target.value)} placeholder="HH:MM or HH:MM AM/PM" className="w-full border rounded px-3 py-2" />
+          <label className="block text-sm font-medium mb-1">Start Time</label>
+          <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} className="w-full border rounded px-3 py-2" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1">End Time</label>
+          <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} className="w-full border rounded px-3 py-2" />
         </div>
       </div>
       <div>
         <label className="block text-sm font-medium mb-1">Type</label>
-        <input value={type} onChange={e => setType(e.target.value)} className="w-full border rounded px-3 py-2" />
+        <select value={type} onChange={e => setType(e.target.value)} className="w-full border rounded px-3 py-2 bg-white dark:bg-zinc-900">
+          <option value="" disabled>Select a type</option>
+          <option value="workshop">workshop</option>
+          <option value="teaching">teaching</option>
+          <option value="blocking">blocking</option>
+          <option value="cleaning">cleaning</option>
+          <option value="performance">performance</option>
+          <option value="social">social</option>
+          <option value="other">other</option>
+        </select>
       </div>
       <div>
         <label className="block text-sm font-medium mb-1">Location</label>

@@ -17,14 +17,28 @@ async function isAdmin(): Promise<boolean> {
   }
 }
 
+const timePattern = /^\d{2}:\d{2}(?: ?[AP]M)?$/i;
 const PatchSchema = z.object({
   title: z.string().min(1).optional(),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  time: z.string().regex(/^\d{2}:\d{2}(?: ?[AP]M)?$/i).optional(),
-  type: z.string().min(1).optional(),
+  startTime: z.string().regex(timePattern).optional(),
+  endTime: z.string().regex(timePattern).optional(),
+  type: z.enum(['workshop','teaching','blocking','cleaning','performance','social','other']).optional(),
   location: z.string().min(1).optional(),
   description: z.string().min(1).optional()
-}).refine(obj => Object.keys(obj).length > 0, { message: 'At least one field required' });
+}).refine(obj => Object.keys(obj).length > 0, { message: 'At least one field required' })
+  .refine(obj => {
+    if (!obj.startTime || !obj.endTime) return true; // only compare if both provided
+    function toMinutes(t: string) {
+      const ampm = /(AM|PM)$/i.test(t) ? t.slice(-2).toUpperCase() : '';
+      const [hhRaw, mmRaw] = t.replace(/(AM|PM)$/i, '').trim().split(':');
+      let hh = parseInt(hhRaw, 10); const mm = parseInt(mmRaw, 10);
+      if (ampm === 'PM' && hh < 12) hh += 12;
+      if (ampm === 'AM' && hh === 12) hh = 0;
+      return hh * 60 + mm;
+    }
+    return toMinutes(obj.endTime) >= toMinutes(obj.startTime);
+  }, { message: 'endTime must be after startTime' });
 
 // GET /api/schedules/[id] - public
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -49,7 +63,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (!parsed.success) {
     return new Response(JSON.stringify({ error: parsed.error.errors[0]?.message || 'Invalid payload' }), { status: 400 });
   }
-  const updateValues = parsed.data;
+  const updateValues: Record<string, unknown> = parsed.data;
   if (Object.keys(updateValues).length === 0) {
     return new Response(JSON.stringify({ error: 'Nothing to update' }), { status: 400 });
   }

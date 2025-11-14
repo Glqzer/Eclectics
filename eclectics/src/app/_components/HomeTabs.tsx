@@ -156,33 +156,54 @@ export default function HomeTabs() {
             {(() => {
               const now = new Date();
               const upcoming = schedules
-                .map((s: any) => ({ ...s, _dt: toEventDate(s.date, s.time) }))
-                .filter((s: any) => s._dt instanceof Date && (s._dt as Date) >= now)
-                .sort((a: any, b: any) => ((a._dt as Date).getTime() - (b._dt as Date).getTime()));
+                .map((s: any) => ({
+                  ...s,
+                  _start: toEventDate(s.date, s.startTime || s.time),
+                  _end: toEventDate(s.date, s.endTime || s.startTime || s.time)
+                }))
+                .filter((s: any) => s._end instanceof Date && (s._end as Date) >= now)
+                .sort((a: any, b: any) => ((a._start as Date).getTime() - (b._start as Date).getTime()));
               if (upcoming.length === 0) {
                 return <p className="text-gray-600 dark:text-gray-400">No upcoming schedule.</p>;
               }
               return (
                 <ul className="space-y-2">
                   {upcoming.map((s: any) => {
-                    const dt = s._dt as Date;
+                    const dtStart = s._start as Date;
+                    const dtEnd = s._end as Date;
                     const dateStr = new Intl.DateTimeFormat('en-US', {
                       weekday: 'short', month: 'short', day: 'numeric'
-                    }).format(dt);
-                    const hasTime = !!(s.time && String(s.time).trim());
-                    const timeStr = hasTime
-                      ? new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' }).format(dt)
-                      : '';
-                    const when = hasTime ? `${dateStr}, ${timeStr}` : dateStr;
+                    }).format(dtStart);
+                    const hasStart = !!(s.startTime || s.time);
+                    const hasEnd = !!s.endTime;
+                    const startStr = hasStart ? new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' }).format(dtStart) : '';
+                    const endStr = hasEnd ? new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' }).format(dtEnd) : '';
+                    const when = hasStart ? `${dateStr}, ${startStr}${hasEnd ? ' – ' + endStr : ''}` : dateStr;
+                    // duration calculation in minutes
+                    let durationLabel = '';
+                    if (hasStart && hasEnd) {
+                      const diffMs = dtEnd.getTime() - dtStart.getTime();
+                      if (diffMs > 0) {
+                        const totalMin = Math.round(diffMs / 60000);
+                        const hrs = Math.floor(totalMin / 60);
+                        const mins = totalMin % 60;
+                        durationLabel = hrs > 0 ? `${hrs}h${mins ? ' '+mins+'m' : ''}` : `${mins}m`;
+                      }
+                    }
                     return (
                       <li key={s.id} className="border rounded p-3 hover:shadow">
                         <Link href={`/schedules/${s.id}`} className="block">
                           <div>
                             <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{s.title}</div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400">{when}</div>
-                            {s.type && (
-                              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{s.type}</div>
-                            )}
+                            <div className="flex flex-wrap items-center gap-2 mt-0.5">
+                              <span className="text-xs text-gray-500 dark:text-gray-400">{when}</span>
+                              {durationLabel && (
+                                <span className="text-xs rounded-full bg-gray-100 dark:bg-zinc-800 px-2 py-0.5 text-gray-600 dark:text-gray-300">{durationLabel}</span>
+                              )}
+                              {s.type && (
+                                <span className="text-xs rounded-full bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300 px-2 py-0.5">{s.type}</span>
+                              )}
+                            </div>
                           </div>
                         </Link>
                       </li>

@@ -6,7 +6,8 @@ export default function ScheduleForm() {
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
   const [type, setType] = useState('');
   const [location, setLocation] = useState('');
   const [description, setDescription] = useState('');
@@ -18,7 +19,7 @@ export default function ScheduleForm() {
     setError('');
     setLoading(true);
     try {
-      const payload = { title, date, time, type, location, description: description || undefined };
+      const payload = { title, date, startTime, endTime, type, location, description: description || undefined };
       const res = await fetch('/api/schedules', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -49,13 +50,26 @@ export default function ScheduleForm() {
           <input type="date" value={date} onChange={e => setDate(e.target.value)} required className="w-full border rounded px-3 py-2" />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">Time</label>
-          <input value={time} onChange={e => setTime(e.target.value)} placeholder="HH:MM or HH:MM AM/PM" className="w-full border rounded px-3 py-2" />
+          <label className="block text-sm font-medium mb-1">Start Time</label>
+          <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} required className="w-full border rounded px-3 py-2" />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1">End Time</label>
+          <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} required className="w-full border rounded px-3 py-2" />
         </div>
       </div>
       <div>
         <label className="block text-sm font-medium mb-1">Type</label>
-        <input value={type} onChange={e => setType(e.target.value)} className="w-full border rounded px-3 py-2" />
+        <select value={type} onChange={e => setType(e.target.value)} required className="w-full border rounded px-3 py-2 bg-white dark:bg-zinc-900">
+          <option value="" disabled>Select a type</option>
+          <option value="workshop">workshop</option>
+          <option value="teaching">teaching</option>
+          <option value="blocking">blocking</option>
+          <option value="cleaning">cleaning</option>
+          <option value="performance">performance</option>
+          <option value="social">social</option>
+          <option value="other">other</option>
+        </select>
       </div>
       <div>
         <label className="block text-sm font-medium mb-1">Location</label>
