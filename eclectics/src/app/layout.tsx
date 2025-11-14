@@ -33,6 +33,17 @@ export default function RootLayout({
           {/* Header shows current user and logout */}
           <Header />
           <main className="flex-1">{children}</main>
+          <footer className="w-full border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-black px-6 py-4 text-center text-sm text-gray-700 dark:text-gray-300">
+            Add this website as an App!{' '}
+            <a
+              href="https://support.apple.com/guide/iphone/open-as-web-app-iphea86e5236/26/ios/26"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-purple-600 hover:underline"
+            >
+              Here&apos;s how
+            </a>
+          </footer>
         </div>
       </body>
     </html>
