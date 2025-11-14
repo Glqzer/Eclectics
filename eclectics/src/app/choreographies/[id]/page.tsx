@@ -82,19 +82,19 @@ export default async function ChoreographyPage({ params }: Params) {
         {c.cut && (
           <div>
             <div className="text-xs text-gray-500">Cut</div>
-            <a href={c.cut} target="_blank" rel="noreferrer" className="text-purple-600">Open cut</a>
+            <a href={c.cut} target="_blank" rel="noreferrer" className="text-purple-600">Open Audio Cut</a>
           </div>
         )}
         {c.cleaningVideos && (
           <div>
-            <div className="text-xs text-gray-500">Cleaning Video</div>
-            <a href={c.cleaningVideos} target="_blank" rel="noreferrer" className="text-purple-600">Open cleaning video</a>
+            <div className="text-xs text-gray-500">Cleaning Videos</div>
+            <a href={c.cleaningVideos} target="_blank" rel="noreferrer" className="text-purple-600">Open Cleaning Videos</a>
           </div>
         )}
         {c.cleaningNotes && (
           <div>
             <div className="text-xs text-gray-500">Cleaning Notes</div>
-            <a href={c.cleaningNotes} target="_blank" rel="noreferrer" className="text-purple-600">Open cleaning notes</a>
+            <a href={c.cleaningNotes} target="_blank" rel="noreferrer" className="text-purple-600">Open Cleaning Notes</a>
           </div>
         )}
       </div>
