@@ -34,6 +34,13 @@ body {
 .form-input::placeholder, .auth-input::placeholder {
   color: #6b7280; /* Tailwind gray-500 */
 }
+.auth-input::-webkit-input-placeholder,
+.form-input::-webkit-input-placeholder {
+  color: #6b7280;
+}
+.form-input::placeholder, .auth-input::placeholder {
+  color: #6b7280; /* Tailwind gray-500 */
+}
 /* iOS Safari autofill keeps text black */
 input.form-input:-webkit-autofill,
 textarea.form-input:-webkit-autofill,

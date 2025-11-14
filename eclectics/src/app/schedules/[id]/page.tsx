@@ -34,7 +34,12 @@ export default async function SchedulePage({ params }: Params) {
         </div>
         {isAdmin && (
           <div>
-            <Link href={`/schedules/${s.id}/edit`} className="text-sm text-gray-700 hover:underline">Edit</Link>
+            <Link
+              href={`/schedules/${s.id}/edit`}
+              className="inline-flex items-center gap-1 text-sm text-gray-700 bg-white border border-gray-300 px-3 py-1.5 rounded-md shadow-sm hover:bg-gray-50 active:scale-95 transition focus:outline-none focus:ring-2 focus:ring-purple-400"
+            >
+              Edit
+            </Link>
           </div>
         )}
       </div>

@@ -129,13 +129,18 @@ export default function HomeTabs() {
               <ul className="space-y-2">
                 {choreographies.map((c: any) => (
                   <li key={c.id} className="border rounded p-3 hover:shadow">
-                    <Link href={`/choreographies/${c.id}`} className="block">
+                    <Link href={`/choreographies/${c.id}`} className="block group rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 transition active:scale-[0.98]">
                       <div className="flex items-center justify-between">
                         <div>
                           <div className="text-sm font-medium text-gray-900 dark:text-gray-100">{c.name}</div>
                           <div className="text-xs text-gray-500 dark:text-gray-400">{c.choreographer?.name || c.choreographer?.email}</div>
                         </div>
-                        <div className="text-sm text-purple-600">View</div>
+                        <div>
+                          <span className="inline-flex items-center gap-1 text-xs font-semibold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-900/20 px-2.5 py-1 rounded-full transition-colors group-hover:bg-purple-100 group-active:scale-95">
+                            View
+                            <span aria-hidden>→</span>
+                          </span>
+                        </div>
                       </div>
                     </Link>
                   </li>
@@ -195,7 +200,7 @@ export default function HomeTabs() {
                     }
                     return (
                       <li key={s.id} className="border rounded p-3 hover:shadow">
-                        <Link href={`/schedules/${s.id}`} className="flex items-center justify-between gap-4">
+                        <Link href={`/schedules/${s.id}`} className="flex items-center justify-between gap-4 group rounded-md focus:outline-none focus:ring-2 focus:ring-purple-400 transition active:scale-[0.98]">
                           <div className="min-w-0 flex-1">
                             <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{s.title}</div>
                             <div className="flex flex-wrap items-center gap-2 mt-0.5">
@@ -209,7 +214,10 @@ export default function HomeTabs() {
                             </div>
                           </div>
                           <div className="shrink-0">
-                            <span className="inline-flex items-center text-xs font-semibold text-purple-600 dark:text-purple-300 hover:underline">View →</span>
+                            <span className="inline-flex items-center gap-1 text-xs font-semibold text-purple-700 dark:text-purple-300 bg-purple-50 dark:bg-purple-900/20 px-2.5 py-1 rounded-full transition-colors group-hover:bg-purple-100 group-active:scale-95">
+                              View
+                              <span aria-hidden>→</span>
+                            </span>
                           </div>
                         </Link>
                       </li>
