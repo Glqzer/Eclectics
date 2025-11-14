@@ -13,6 +13,7 @@ export default function Header() {
 
   useEffect(() => {
     let mounted = true;
+    setLoading(true);
     (async () => {
       try {
         const res = await fetch('/api/auth/me', { cache: 'no-store' });
@@ -32,7 +33,7 @@ export default function Header() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [pathname]);
 
   // Hide header on login/signup pages
   if (pathname === '/login' || pathname === '/signup') return null;

@@ -32,11 +32,11 @@ body {
   caret-color: #000;
 }
 .form-input::placeholder, .auth-input::placeholder {
-  color: #6b7280; /* Tailwind gray-500 */
+  color: #9ca3af; /* Tailwind gray-400 (lighter) */
 }
 .auth-input::-webkit-input-placeholder,
 .form-input::-webkit-input-placeholder {
-  color: #6b7280;
+  color: #9ca3af; /* gray-400 */
 }
 .form-input::placeholder, .auth-input::placeholder {
   color: #6b7280; /* Tailwind gray-500 */
