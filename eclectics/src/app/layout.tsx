@@ -17,7 +17,8 @@ export const metadata: Metadata = {
   title: "Eclectics",
   description: "Web App for Eclectics Dance Team",
   icons: {
-    icon: '/ecrown.png'
+    icon: '/app/favicon.ico',
+    shortcut: '/app/favicon.ico'
   }
 };
 
@@ -28,6 +29,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/app/favicon.ico" />
+        <link rel="shortcut icon" href="/app/favicon.ico" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -40,3 +45,4 @@ export default function RootLayout({
     </html>
   );
 }
+

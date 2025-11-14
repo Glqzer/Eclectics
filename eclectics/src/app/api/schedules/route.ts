@@ -40,8 +40,15 @@ async function isAdmin(): Promise<boolean> {
 
 // GET /api/schedules - public
 export async function GET() {
-  const rows = await db.select().from(schedules).orderBy(schedules.date, schedules.time);
-  return Response.json(rows);
+  try {
+    // Order by date then start_time (fallback to legacy time if start_time absent)
+    const rows = await db.select().from(schedules).orderBy(schedules.date, schedules.startTime ?? schedules.time);
+    return Response.json(rows);
+  } catch (e: unknown) {
+    // Provide graceful error structure
+    const message = e instanceof Error ? e.message : String(e);
+    return new Response(JSON.stringify({ error: 'Failed to fetch schedules', detail: message }), { status: 503 });
+  }
 }
 
 // POST /api/schedules - admin only
