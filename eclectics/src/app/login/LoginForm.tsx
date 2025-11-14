@@ -3,28 +3,17 @@ import Link from 'next/link';
 import { loginWithEmail } from './actions';
 import { useActionState } from 'react';
 import { useFormStatus } from 'react-dom';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { } from 'react';
 
 export default function LoginForm() {
   const [state, formAction] = useActionState(
-    async (_prevState: { error: string; success: boolean }, formData: FormData) => {
+    async (_prevState: { error: string }, formData: FormData) => {
       const result = await loginWithEmail(formData);
-      return {
-        error: result?.error || '',
-        success: !!(result as any)?.success,
-      };
+      return { error: result?.error || '' };
     },
-    { error: '', success: false }
+    { error: '' }
   );
   const { pending } = useFormStatus();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (state.success) {
-      router.push('/');
-    }
-  }, [state.success, router]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-200">

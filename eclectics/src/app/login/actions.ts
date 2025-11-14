@@ -35,10 +35,11 @@ export async function loginWithEmail(formData: FormData) {
       path: '/',
       maxAge: 60 * 60 * 24 * 30,
     });
-
-    return { success: true };
   } catch {
     return { error: 'Login failed.' };
   }
+
+  // Redirect outside try/catch so RedirectError isn't swallowed
+  redirect('/');
 }
  
