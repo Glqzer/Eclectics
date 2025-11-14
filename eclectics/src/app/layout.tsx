@@ -27,7 +27,7 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/app/favicon.ico" />
         <link rel="shortcut icon" href="/app/favicon.ico" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/app/icon.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icon.png" />
       </head>
       <body className={`${lexend.className} antialiased`}>
         <div className="min-h-screen flex flex-col">
