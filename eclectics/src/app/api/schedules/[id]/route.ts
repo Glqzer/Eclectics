@@ -22,13 +22,14 @@ const PatchSchema = z.object({
   title: z.string().min(1).optional(),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
   startTime: z.string().regex(timePattern).optional(),
-  endTime: z.string().regex(timePattern).optional(),
+  endTime: z.union([z.string().regex(timePattern), z.null()]).optional(),
   type: z.enum(['workshop','teaching','blocking','cleaning','performance','social','other']).optional(),
   location: z.string().min(1).optional(),
   description: z.string().min(1).optional()
 }).refine(obj => Object.keys(obj).length > 0, { message: 'At least one field required' })
   .refine(obj => {
-    if (!obj.startTime || !obj.endTime) return true; // only compare if both provided
+    // Only compare when both are provided as strings (not null)
+    if (!obj.startTime || obj.endTime == null) return true;
     function toMinutes(t: string) {
       const ampm = /(AM|PM)$/i.test(t) ? t.slice(-2).toUpperCase() : '';
       const [hhRaw, mmRaw] = t.replace(/(AM|PM)$/i, '').trim().split(':');
@@ -63,7 +64,8 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (!parsed.success) {
     return new Response(JSON.stringify({ error: parsed.error.errors[0]?.message || 'Invalid payload' }), { status: 400 });
   }
-  const updateValues: Record<string, unknown> = parsed.data;
+  // Normalize update values; allow clearing endTime by sending null
+  const updateValues: Record<string, unknown> = { ...parsed.data };
   if (Object.keys(updateValues).length === 0) {
     return new Response(JSON.stringify({ error: 'Nothing to update' }), { status: 400 });
   }

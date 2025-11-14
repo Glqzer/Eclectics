@@ -7,7 +7,7 @@ export default function EditScheduleForm({ schedule }: { schedule: any }) {
   const [title, setTitle] = useState(schedule.title || '');
   const [date, setDate] = useState(schedule.date || '');
   const [startTime, setStartTime] = useState(schedule.startTime || schedule.time || '');
-  const [endTime, setEndTime] = useState(schedule.endTime || schedule.time || '');
+  const [endTime, setEndTime] = useState(schedule.endTime || '');
   const [type, setType] = useState(schedule.type || '');
   const [location, setLocation] = useState(schedule.location || '');
   const [description, setDescription] = useState(schedule.description || '');
@@ -19,7 +19,17 @@ export default function EditScheduleForm({ schedule }: { schedule: any }) {
     setError('');
     setLoading(true);
     try {
-      const payload: Record<string, unknown> = { title, date, startTime, endTime, type, location, description: description || undefined };
+      const normalizedEnd = (endTime ?? '').toString().trim() === '' ? null : endTime;
+      const normalizedStart = (startTime ?? '').toString().trim() === '' ? undefined : startTime;
+      const payload: Record<string, unknown> = {
+        title,
+        date,
+        startTime: normalizedStart,
+        endTime: normalizedEnd,
+        type,
+        location,
+        description: description || undefined,
+      };
       const res = await fetch(`/api/schedules/${schedule.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
