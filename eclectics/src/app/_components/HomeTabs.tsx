@@ -10,6 +10,7 @@ export default function HomeTabs() {
   const [email, setEmail] = useState<string | null>(null);
   const [choreographies, setChoreographies] = useState<Array<any>>([]);
   const [schedules, setSchedules] = useState<Array<any>>([]);
+  const [schedulePage, setSchedulePage] = useState<number>(1);
   
   function toEventDate(dateStr: string, timeStr?: string): Date | null {
     try {
@@ -39,12 +40,14 @@ export default function HomeTabs() {
       return null;
     }
   }
-  // Initialize tab from URL (?tab=schedule|choreographies)
+  // Initialize tab and page from URL (?tab=schedule|choreographies&?page=1..)
   useEffect(() => {
     const qp = searchParams?.get('tab');
     if (qp === 'schedule' || qp === 'choreographies') {
       setTab(qp);
     }
+    const p = parseInt(searchParams?.get('page') || '1', 10);
+    if (!Number.isNaN(p) && p > 0) setSchedulePage(p);
   }, [searchParams]);
 
   useEffect(() => {
@@ -100,6 +103,20 @@ export default function HomeTabs() {
     setTab(next);
     const url = new URL(window.location.href);
     url.searchParams.set('tab', next);
+    if (next === 'schedule') {
+      url.searchParams.set('page', String(schedulePage));
+    } else {
+      url.searchParams.delete('page');
+    }
+    router.replace(url.pathname + '?' + url.searchParams.toString());
+  }
+
+  function gotoSchedulePage(p: number, totalPages: number) {
+    const clamped = Math.max(1, Math.min(totalPages, p));
+    setSchedulePage(clamped);
+    const url = new URL(window.location.href);
+    url.searchParams.set('tab', 'schedule');
+    url.searchParams.set('page', String(clamped));
     router.replace(url.pathname + '?' + url.searchParams.toString());
   }
 
@@ -189,9 +206,15 @@ export default function HomeTabs() {
               if (upcoming.length === 0) {
                 return <p className="text-gray-600 dark:text-gray-400">No upcoming schedule.</p>;
               }
+              const pageSize = 10;
+              const totalPages = Math.max(1, Math.ceil(upcoming.length / pageSize));
+              const currentPage = Math.min(schedulePage, totalPages);
+              const start = (currentPage - 1) * pageSize;
+              const pageItems = upcoming.slice(start, start + pageSize);
               return (
+                <>
                 <ul className="space-y-2">
-                  {upcoming.map((s: any) => {
+                  {pageItems.map((s: any) => {
                     const dtStart = s._start as Date;
                     const dtEnd = s._end as Date;
                     const dateStr = new Intl.DateTimeFormat('en-US', {
@@ -245,6 +268,47 @@ export default function HomeTabs() {
                     );
                   })}
                 </ul>
+                {upcoming.length > pageSize && (
+                  <div className="flex items-center justify-between pt-3">
+                    <div className="text-xs text-gray-500">Page {currentPage} of {totalPages}</div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => gotoSchedulePage(currentPage - 1, totalPages)}
+                        disabled={currentPage <= 1}
+                        className="inline-flex items-center px-3 py-1.5 text-sm border border-gray-300 rounded-md bg-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 active:scale-95 transition focus:outline-none focus:ring-2 focus:ring-purple-400"
+                      >
+                        Prev
+                      </button>
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                          <button
+                            key={p}
+                            type="button"
+                            onClick={() => gotoSchedulePage(p, totalPages)}
+                            className={`${p === currentPage
+                              ? 'bg-purple-600 text-white border-purple-600'
+                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}
+                              inline-flex items-center justify-center w-8 h-8 text-sm border rounded-md transition active:scale-95 focus:outline-none focus:ring-2 focus:ring-purple-400`}
+                            aria-current={p === currentPage ? 'page' : undefined}
+                            aria-label={`Go to page ${p}`}
+                          >
+                            {p}
+                          </button>
+                        ))}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => gotoSchedulePage(currentPage + 1, totalPages)}
+                        disabled={currentPage >= totalPages}
+                        className="inline-flex items-center px-3 py-1.5 text-sm border border-gray-300 rounded-md bg-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 active:scale-95 transition focus:outline-none focus:ring-2 focus:ring-purple-400"
+                      >
+                        Next
+                      </button>
+                    </div>
+                  </div>
+                )}
+                </>
               );
             })()}
           </div>
