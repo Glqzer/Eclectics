@@ -40,6 +40,7 @@ export default async function ChoreographyPage({ params }: Params) {
       cut: choreographies.cut,
       cleaningVideos: choreographies.cleaningVideos,
       cleaningNotes: choreographies.cleaningNotes,
+      blockingSlides: choreographies.blockingSlides,
       createdAt: choreographies.createdAt,
       choreographer: {
         id: users.id,
@@ -88,6 +89,12 @@ export default async function ChoreographyPage({ params }: Params) {
           <div>
             <div className="text-xs text-gray-500">Cut</div>
             <a href={c.cut} target="_blank" rel="noreferrer" className="text-purple-600">Open Audio Cut</a>
+          </div>
+        )}
+        {c.blockingSlides && (
+          <div>
+            <div className="text-xs text-gray-500">Blocking Slides</div>
+            <a href={c.blockingSlides} target="_blank" rel="noreferrer" className="text-purple-600">Open Blocking Slides</a>
           </div>
         )}
         {c.cleaningVideos && (

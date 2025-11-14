@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-interface ChoreographyShape { id: number; name?: string | null; cut?: string | null; cleaningVideos?: string | null; cleaningNotes?: string | null }
+interface ChoreographyShape { id: number; name?: string | null; cut?: string | null; cleaningVideos?: string | null; cleaningNotes?: string | null; blockingSlides?: string | null }
 
 export default function EditChoreographyForm({ choreography }: { choreography: ChoreographyShape }) {
   const router = useRouter();
@@ -10,6 +10,7 @@ export default function EditChoreographyForm({ choreography }: { choreography: C
   const [cut, setCut] = useState(choreography.cut || '');
   const [cleaningVideos, setCleaningVideos] = useState(choreography.cleaningVideos || '');
   const [cleaningNotes, setCleaningNotes] = useState(choreography.cleaningNotes || '');
+  const [blockingSlides, setBlockingSlides] = useState(choreography.blockingSlides || '');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -21,7 +22,7 @@ export default function EditChoreographyForm({ choreography }: { choreography: C
       const res = await fetch(`/api/choreographies/${choreography.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, cut: cut || null, cleaningVideos: cleaningVideos || null, cleaningNotes: cleaningNotes || null })
+        body: JSON.stringify({ name, cut: cut || null, cleaningVideos: cleaningVideos || null, cleaningNotes: cleaningNotes || null, blockingSlides: blockingSlides || null })
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -53,6 +54,10 @@ export default function EditChoreographyForm({ choreography }: { choreography: C
       <div>
         <label className="block text-sm font-medium mb-1">Link to cleaning notes</label>
         <input value={cleaningNotes} onChange={e => setCleaningNotes(e.target.value)} className="w-full border rounded px-3 py-2 text-black bg-white form-input" />
+      </div>
+      <div>
+        <label className="block text-sm font-medium mb-1">Link to blocking slides</label>
+        <input value={blockingSlides} onChange={e => setBlockingSlides(e.target.value)} className="w-full border rounded px-3 py-2 text-black bg-white form-input" />
       </div>
       {error && <div className="text-sm text-red-600">{error}</div>}
       <div>

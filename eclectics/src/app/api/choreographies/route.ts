@@ -11,6 +11,7 @@ export async function GET() {
       cut: choreographies.cut,
       cleaningVideos: choreographies.cleaningVideos,
       cleaningNotes: choreographies.cleaningNotes,
+      blockingSlides: choreographies.blockingSlides,
       createdAt: choreographies.createdAt,
       choreographer: {
         id: users.id,
@@ -56,7 +57,7 @@ export async function POST(req: Request) {
   } catch {
     return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400 });
   }
-  const { choreographerUserId, name, cut, cleaningVideos, cleaningNotes } = body;
+  const { choreographerUserId, name, cut, cleaningVideos, cleaningNotes, blockingSlides } = body;
   if (!choreographerUserId || !name || !cut || !cleaningVideos || !cleaningNotes) {
     return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400 });
   }
@@ -70,7 +71,8 @@ export async function POST(req: Request) {
     name,
     cut,
     cleaningVideos,
-    cleaningNotes
+    cleaningNotes,
+    blockingSlides
   }).returning();
   return Response.json(inserted[0]);
 }

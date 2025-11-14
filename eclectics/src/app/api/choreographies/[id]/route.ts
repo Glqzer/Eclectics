@@ -17,6 +17,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ id:
     cut: choreographies.cut,
     cleaningVideos: choreographies.cleaningVideos,
     cleaningNotes: choreographies.cleaningNotes,
+    blockingSlides: choreographies.blockingSlides,
     createdAt: choreographies.createdAt,
     choreographer: users
   })
@@ -92,6 +93,7 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if ('cut' in json) updates.cut = json.cut ?? null;
   if ('cleaningVideos' in json) updates.cleaningVideos = json.cleaningVideos ?? null;
   if ('cleaningNotes' in json) updates.cleaningNotes = json.cleaningNotes ?? null;
+  if ('blockingSlides' in json) updates.blockingSlides = json.blockingSlides ?? null;
 
   if (!Object.keys(updates).length) return new Response(JSON.stringify({ error: 'Nothing to update' }), { status: 400 });
 

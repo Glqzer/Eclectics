@@ -49,6 +49,10 @@ export default async function NewChoreographyPage() {
           <label className="block text-sm font-medium mb-1" htmlFor="cleaningNote">Link to cleaning note <span className="text-xs text-gray-500">(optional)</span></label>
           <input id="cleaningNote" name="cleaningNote" type="url" className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400 text-black bg-white form-input" placeholder="https://" />
         </div>
+          <div>
+            <label className="block text-sm font-medium mb-1" htmlFor="blockingSlides">Link to blocking slides <span className="text-xs text-gray-500">(optional)</span></label>
+            <input id="blockingSlides" name="blockingSlides" type="url" className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400 text-black bg-white form-input" placeholder="https://" />
+          </div>
         <button type="submit" className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-2 rounded transition-colors">Create</button>
       </form>
     </div>

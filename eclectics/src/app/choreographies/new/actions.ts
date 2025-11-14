@@ -18,6 +18,7 @@ export async function createChoreography(formData: FormData) {
   const cut = (formData.get('cut') || '').toString().trim();
   const cleaningVideo = (formData.get('cleaningVideo') || '').toString().trim();
   const cleaningNote = (formData.get('cleaningNote') || '').toString().trim();
+  const blockingSlides = (formData.get('blockingSlides') || '').toString().trim();
 
   if (!name) return { error: 'Name required' };
   let choreographerUserId: number | null = null;
@@ -42,6 +43,7 @@ export async function createChoreography(formData: FormData) {
     cut: cut || null,
     cleaningVideos: cleaningVideo || null,
     cleaningNotes: cleaningNote || null,
+    blockingSlides: blockingSlides || null,
   });
 
   redirect('/');

@@ -16,6 +16,7 @@ export const choreographies = pgTable('choreographies', {
   cut: varchar('cut', { length: 512 }),
   cleaningVideos: varchar('cleaning_videos', { length: 512 }),
   cleaningNotes: varchar('cleaning_notes', { length: 512 }),
+  blockingSlides: varchar('blocking_slides', { length: 512 }),
   createdAt: timestamp('created_at').defaultNow().notNull()
 });
 
