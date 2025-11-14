@@ -45,10 +45,11 @@ export async function signupWithEmail(formData: FormData) {
       path: '/',
       maxAge: 60 * 60 * 24 * 30,
     });
-
-    redirect('/');
   } catch {
     return { error: 'Sign up failed.' };
   }
+
+  // Important: perform redirect outside try/catch so it isn't swallowed
+  redirect('/');
 }
  
