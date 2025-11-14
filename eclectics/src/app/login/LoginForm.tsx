@@ -23,14 +23,14 @@ export default function LoginForm() {
           <input
             type="email"
             name="email"
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400 text-black auth-input"
             placeholder="Email address"
             required
           />
           <input
             type="password"
             name="password"
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400 text-black auth-input"
             placeholder="Password"
             required
           />

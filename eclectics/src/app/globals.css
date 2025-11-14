@@ -24,3 +24,20 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Force black input text on auth forms (helps iOS Safari while typing) */
+.form-input, .auth-input {
+  color: #000 !important;
+  -webkit-text-fill-color: #000 !important;
+  caret-color: #000;
+}
+.form-input::placeholder, .auth-input::placeholder {
+  color: #6b7280; /* Tailwind gray-500 */
+}
+/* iOS Safari autofill keeps text black */
+input.form-input:-webkit-autofill,
+textarea.form-input:-webkit-autofill,
+input.auth-input:-webkit-autofill,
+textarea.auth-input:-webkit-autofill {
+  -webkit-text-fill-color: #000 !important;
+}

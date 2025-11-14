@@ -40,19 +40,19 @@ export default function EditChoreographyForm({ choreography }: { choreography: C
     <form onSubmit={onSubmit} className="space-y-4">
       <div>
         <label className="block text-sm font-medium mb-1">Name</label>
-        <input value={name} onChange={e => setName(e.target.value)} required className="w-full border rounded px-3 py-2" />
+        <input value={name} onChange={e => setName(e.target.value)} required className="w-full border rounded px-3 py-2 text-black bg-white form-input" />
       </div>
       <div>
         <label className="block text-sm font-medium mb-1">Link to cut</label>
-        <input value={cut} onChange={e => setCut(e.target.value)} className="w-full border rounded px-3 py-2" />
+        <input value={cut} onChange={e => setCut(e.target.value)} className="w-full border rounded px-3 py-2 text-black bg-white form-input" />
       </div>
       <div>
         <label className="block text-sm font-medium mb-1">Link to cleaning video</label>
-        <input value={cleaningVideos} onChange={e => setCleaningVideos(e.target.value)} className="w-full border rounded px-3 py-2" />
+        <input value={cleaningVideos} onChange={e => setCleaningVideos(e.target.value)} className="w-full border rounded px-3 py-2 text-black bg-white form-input" />
       </div>
       <div>
         <label className="block text-sm font-medium mb-1">Link to cleaning notes</label>
-        <input value={cleaningNotes} onChange={e => setCleaningNotes(e.target.value)} className="w-full border rounded px-3 py-2" />
+        <input value={cleaningNotes} onChange={e => setCleaningNotes(e.target.value)} className="w-full border rounded px-3 py-2 text-black bg-white form-input" />
       </div>
       {error && <div className="text-sm text-red-600">{error}</div>}
       <div>
