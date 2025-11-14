@@ -58,3 +58,17 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const updated = await db.update(schedules).set(updateValues).where(eq(schedules.id, num)).returning();
   return Response.json(updated[0]);
 }
+
+// DELETE /api/schedules/[id] - admin only
+export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  if (!(await isAdmin())) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 403 });
+  }
+  const { id } = await params;
+  const num = Number(id);
+  if (Number.isNaN(num)) return new Response(JSON.stringify({ error: 'Invalid id' }), { status: 400 });
+  const existing = await db.select({ id: schedules.id }).from(schedules).where(eq(schedules.id, num));
+  if (!existing.length) return new Response(JSON.stringify({ error: 'Not found' }), { status: 404 });
+  await db.delete(schedules).where(eq(schedules.id, num));
+  return new Response(null, { status: 204 });
+}
