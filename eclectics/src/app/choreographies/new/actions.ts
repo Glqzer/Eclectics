@@ -19,10 +19,18 @@ export async function createChoreography(formData: FormData) {
   const cleaningVideo = (formData.get('cleaningVideo') || '').toString().trim();
   const cleaningNote = (formData.get('cleaningNote') || '').toString().trim();
 
-  if (!choreographerIdRaw) return { error: 'Choreographer required' };
-  const choreographerUserId = parseInt(choreographerIdRaw.toString(), 10);
-  if (Number.isNaN(choreographerUserId)) return { error: 'Invalid choreographer' };
   if (!name) return { error: 'Name required' };
+  let choreographerUserId: number | null = null;
+  if (choreographerIdRaw && choreographerIdRaw.toString().trim()) {
+    const parsedId = parseInt(choreographerIdRaw.toString(), 10);
+    if (Number.isNaN(parsedId)) return { error: 'Invalid choreographer' };
+    choreographerUserId = parsedId;
+  } else {
+    // default to current admin user account
+    const selfRows = await db.select().from(users).where(eq(users.email, parsed.email));
+    if (!selfRows.length) return { error: 'Admin user record not found' };
+    choreographerUserId = selfRows[0].id;
+  }
 
   // verify choreographer user exists
   const userRows = await db.select().from(users).where(eq(users.id, choreographerUserId));
