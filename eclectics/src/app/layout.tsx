@@ -1,16 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Lexend } from "next/font/google";
 import "./globals.css";
 import Header from './_components/Header';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const lexend = Lexend({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-lexend"
 });
 
 export const metadata: Metadata = {
@@ -33,9 +28,7 @@ export default function RootLayout({
         <link rel="icon" href="/app/favicon.ico" />
         <link rel="shortcut icon" href="/app/favicon.ico" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${lexend.className} antialiased`}>
         <div className="min-h-screen flex flex-col">
           {/* Header shows current user and logout */}
           <Header />
