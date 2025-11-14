@@ -29,47 +29,8 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Web Push Notifications
+## Deploy on Vercel
 
-This app supports Web Push notifications to remind users 30 minutes before a scheduled event.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-1) Install dependencies
-
-```bash
-cd eclectics
-pnpm install # or npm install / yarn
-```
-
-2) Generate VAPID keys (one-time)
-
-```bash
-node -e "const w=require('web-push');const k=w.generateVAPIDKeys();console.log(k)"
-```
-
-3) Configure environment variables in `.env`
-
-```
-VAPID_PUBLIC_KEY=YOUR_PUBLIC_KEY
-VAPID_PRIVATE_KEY=YOUR_PRIVATE_KEY
-VAPID_SUBJECT=mailto:you@example.com
-NEXT_PUBLIC_VAPID_PUBLIC_KEY=YOUR_PUBLIC_KEY
-```
-
-4) Run migration for push tables
-
-```bash
-node scripts/run_migration_0005.js
-```
-
-5) Schedule dispatch (production)
-
-Set up a cron to POST `https://your-domain/api/push/dispatch` every 5 minutes (Vercel Cron or any scheduler). Locally you can trigger manually:
-
-```bash
-curl -X POST http://localhost:3000/api/push/dispatch
-```
-
-6) Enable notifications (user)
-
-- After logging in, click "Enable Notifications" in the header to subscribe.
-
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
