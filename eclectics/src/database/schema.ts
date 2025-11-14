@@ -1,4 +1,4 @@
-import { pgTable, serial, timestamp, varchar, integer } from 'drizzle-orm/pg-core';
+import { pgTable, serial, timestamp, varchar, integer, text } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -33,4 +33,20 @@ export const schedules = pgTable('schedules', {
   description: varchar('description', { length: 1024 }),
   createdAt: timestamp('created_at').defaultNow().notNull()
 });
+
+  export const pushSubscriptions = pgTable('push_subscriptions', {
+    id: serial('id').primaryKey(),
+    endpoint: text('endpoint').notNull().unique(),
+    p256dh: text('p256dh').notNull(),
+    auth: text('auth').notNull(),
+    email: varchar('email', { length: 255 }),
+    createdAt: timestamp('created_at').defaultNow().notNull(),
+  });
+
+  export const sentNotifications = pgTable('sent_notifications', {
+    id: serial('id').primaryKey(),
+    subscriptionEndpoint: text('subscription_endpoint').notNull(),
+    scheduleId: integer('schedule_id').notNull(),
+    sentAt: timestamp('sent_at').defaultNow().notNull(),
+  });
 
