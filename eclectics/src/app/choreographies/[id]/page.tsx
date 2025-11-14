@@ -3,6 +3,8 @@ import { choreographies, users } from '@/src/database/schema';
 import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
+import DeleteChoreographyButton from '../../_components/DeleteChoreographyButton';
 
 // In Next.js 16 with React 19, `params` can be provided as a promise.
 type Params = { params: { id: string } } | { params: Promise<{ id: string }> };
@@ -14,6 +16,21 @@ export default async function ChoreographyPage({ params }: Params) {
     : (params as { id: string });
   const id = Number(resolved.id);
   if (Number.isNaN(id)) notFound();
+
+  // Determine if current session user is admin
+  let isAdmin = false;
+  try {
+    const jar = await cookies();
+    const raw = jar.get('session')?.value;
+    if (raw) {
+      const parsed = JSON.parse(decodeURIComponent(raw));
+      if (parsed?.email === 'jhu.eclectics@gmail.com') {
+        isAdmin = true;
+      }
+    }
+  } catch {
+    // ignore
+  }
 
   let rows;
   try {
@@ -50,6 +67,7 @@ export default async function ChoreographyPage({ params }: Params) {
   }
   const c = rows[0];
 
+
   return (
     <div className="max-w-3xl mx-auto py-10 px-6">
       <div className="mb-6">
@@ -77,6 +95,7 @@ export default async function ChoreographyPage({ params }: Params) {
           </div>
         )}
       </div>
+      {isAdmin && <DeleteChoreographyButton id={c.id} />}
     </div>
   );
 }
