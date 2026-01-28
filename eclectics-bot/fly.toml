@@ -1,0 +1,10 @@
+app = "eclectics-bot"
+
+kill_signal = "SIGINT"
+kill_timeout = 5
+
+[env]
+  TZ = "America/New_York"
+
+[processes]
+  app = "node index.js"
