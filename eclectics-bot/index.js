@@ -81,7 +81,7 @@ client.on("interactionCreate", async (interaction) => {
       const attachment = new AttachmentBuilder(filePath, { name: pick });
 
       const embed = new EmbedBuilder()
-        .setTitle(name.charAt(0).toUpperCase() + name.slice(1))
+        .setTitle(name)
         .setImage(`attachment://${pick}`);
 
       return interaction.reply({
